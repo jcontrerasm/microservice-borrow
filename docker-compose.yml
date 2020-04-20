@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+
+  borrow:
+    image: $IMAGE_NAME
+    container_name: $CONTAINER_NAME
+    ports: 
+      - 8088:8088
+    depends_on:
+      - sql-server
+
+  sql-server:
+    image: microsoft/mssql-server-linux:2017-CU13
+    container_name: sql-server-container
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: 1a.2b.3c.
+      MSSQL_PID: Express
+    volumes:
+      - /home/jc/database/sql-server/data:/var/opt/mssql/data
+      - /home/jc/database/sql-server/logs:/var/opt/mssql/log
+      - /home/jc/database/sql-server/secrets:/var/opt/mssql/secrets
+    ports:
+      - 1433:1433
+
+networks:
+  default:
+    external:
+      name: cluster-network
